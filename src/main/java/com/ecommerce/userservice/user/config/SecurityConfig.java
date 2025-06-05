@@ -1,5 +1,7 @@
 package com.ecommerce.userservice.user.config;
 
+import com.ecommerce.userservice.user.service.Oauth2UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -9,21 +11,33 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final Oauth2UserService oauth2UserService;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests(authorizeRequests ->
-                        authorizeRequests
-                                .requestMatchers("/auth/google", "/auth/kakao", "/auth/naver").permitAll() // 소셜 로그인 엔드포인트는 인증 없이 접근 가능
-                                .anyRequest().authenticated() // 그 외의 요청은 인증 필수
-                )
-                .formLogin(formLogin ->
-                        formLogin
-                                .loginPage("/login") // 커스텀 로그인 페이지 설정
-                                .permitAll() // 로그인 페이지는 누구나 접근 가능
-                )
-                .csrf(AbstractHttpConfigurer::disable); // 개발 시 CSRF 보호를 비활성화
+            .authorizeHttpRequests(
+                authorizeHttpRequests ->
+                    authorizeHttpRequests.requestMatchers(
+                            "/oauth/**",
+                            "/login/oauth2/code/**"
+                    ).permitAll()
+                    .anyRequest().authenticated()
+            )
+            .httpBasic(AbstractHttpConfigurer::disable)
+            .formLogin(AbstractHttpConfigurer::disable)
+            .logout(AbstractHttpConfigurer::disable)
+            .oauth2Login(oauth2 ->
+                oauth2
+                    .userInfoEndpoint(userInfoEndpointConfig ->
+                        userInfoEndpointConfig.userService(oauth2UserService)
+                    )
+            )
+        ;
+
         return http.build();
     }
 }
