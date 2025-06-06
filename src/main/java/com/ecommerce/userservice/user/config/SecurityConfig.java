@@ -1,5 +1,6 @@
 package com.ecommerce.userservice.user.config;
 
+import com.ecommerce.userservice.user.domain.Role;
 import com.ecommerce.userservice.user.service.Oauth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -19,16 +20,12 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+            .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(
-                authorizeHttpRequests ->
-                    authorizeHttpRequests.requestMatchers(
-                            "/users/**"
-                    ).authenticated()
-                    .anyRequest().permitAll()
+                authorizeHttpRequests -> authorizeHttpRequests
+                    .requestMatchers("/users/**").hasRole(Role.USER.name())
+                    .anyRequest().authenticated()
             )
-            .httpBasic(AbstractHttpConfigurer::disable)
-            .formLogin(AbstractHttpConfigurer::disable)
-            .logout(AbstractHttpConfigurer::disable)
             .oauth2Login(oauth2 ->
                 oauth2
                     .userInfoEndpoint(userInfoEndpointConfig ->
