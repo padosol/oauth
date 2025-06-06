@@ -22,10 +22,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+            // H2 사용을 위한 설정
+            // csrf, requestMatchers 에 toH2Console(), headers 에 FrameOptionsConfig::disalbe
             .csrf(csrf -> csrf.ignoringRequestMatchers(PathRequest.toH2Console()))
-
             .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
-
             .authorizeHttpRequests(
                 authorizeHttpRequests -> authorizeHttpRequests
                     .requestMatchers(PathRequest.toH2Console()).permitAll()
