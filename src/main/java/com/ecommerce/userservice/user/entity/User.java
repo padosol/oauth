@@ -1,6 +1,5 @@
 package com.ecommerce.userservice.user.entity;
 
-import com.ecommerce.userservice.user.domain.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "users")
-public class UserEntity {
+public class User {
 
     @Id
     @Column(name = "user_id")
@@ -32,7 +31,7 @@ public class UserEntity {
     @Enumerated(EnumType.STRING) // Enum 타입은 문자열 형태로 저장해야 함
     private Role role;
 
-    public UserEntity update(String name, String picture) {
+    public User update(String name, String picture) {
         this.name = name;
         this.picture = picture;
 

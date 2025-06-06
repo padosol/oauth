@@ -1,6 +1,6 @@
 package com.ecommerce.userservice.user.config;
 
-import com.ecommerce.userservice.user.domain.Role;
+import com.ecommerce.userservice.user.entity.Role;
 import com.ecommerce.userservice.user.service.Oauth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

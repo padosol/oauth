@@ -1,7 +1,7 @@
 package com.ecommerce.userservice.user.service;
 
-import com.ecommerce.userservice.user.domain.Role;
-import com.ecommerce.userservice.user.entity.UserEntity;
+import com.ecommerce.userservice.user.entity.Role;
+import com.ecommerce.userservice.user.entity.User;
 import com.ecommerce.userservice.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,11 +31,11 @@ public class Oauth2UserService extends DefaultOAuth2UserService {
         String loginId = provider + "_" +providerId;
         String email = oAuth2User.getAttribute("email");
 
-        Optional<UserEntity> optionalUserEntity = userRepository.findById(loginId);
-        UserEntity userEntity;
+        Optional<User> optionalUserEntity = userRepository.findById(loginId);
+        User user;
 
         if(optionalUserEntity.isEmpty()) {
-            userEntity = UserEntity.builder()
+            user = User.builder()
                     .id(loginId)
                     .name(oAuth2User.getAttribute("name"))
                     .email(email)
@@ -43,11 +43,12 @@ public class Oauth2UserService extends DefaultOAuth2UserService {
                     .providerId(providerId)
                     .role(Role.USER)
                     .build();
-            userRepository.save(userEntity);
+            userRepository.save(user);
         } else {
-            userEntity = optionalUserEntity.get();
+            user = optionalUserEntity.get();
         }
 
-        return super.loadUser(userRequest);
+        return new PrincipalDetails(user, oAuth2User.getAttributes());
+
     }
 }

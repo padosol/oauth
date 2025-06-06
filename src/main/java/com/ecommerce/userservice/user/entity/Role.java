@@ -1,4 +1,4 @@
-package com.ecommerce.userservice.user.domain;
+package com.ecommerce.userservice.user.entity;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

@@ -1,7 +1,8 @@
 package com.ecommerce.userservice.user.service;
 
-import com.ecommerce.userservice.user.domain.User;
+import com.ecommerce.userservice.user.entity.User;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.Collection;
@@ -25,7 +26,7 @@ public class PrincipalDetails implements OAuth2User {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return Collections.singletonList(new SimpleGrantedAuthority(user.getRole().getKey()));
     }
 
     @Override
