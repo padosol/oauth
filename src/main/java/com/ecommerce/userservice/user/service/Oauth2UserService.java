@@ -30,6 +30,7 @@ public class Oauth2UserService extends DefaultOAuth2UserService {
         String providerId = oAuth2User.getAttribute("sub");
         String loginId = provider + "_" +providerId;
         String email = oAuth2User.getAttribute("email");
+        String picture = oAuth2User.getAttribute("picture");
 
         Optional<User> optionalUserEntity = userRepository.findById(loginId);
         User user;
@@ -41,6 +42,7 @@ public class Oauth2UserService extends DefaultOAuth2UserService {
                     .email(email)
                     .provider(provider)
                     .providerId(providerId)
+                    .picture(picture)
                     .role(Role.USER)
                     .build();
             userRepository.save(user);

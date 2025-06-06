@@ -29,6 +29,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(
                 authorizeHttpRequests -> authorizeHttpRequests
                     .requestMatchers(PathRequest.toH2Console()).permitAll()
+                    .requestMatchers("/login").permitAll()
                     .requestMatchers("/users/**").hasRole(Role.USER.name())
                     .anyRequest().authenticated()
             )
@@ -38,6 +39,7 @@ public class SecurityConfig {
                     .userInfoEndpoint(userInfoEndpointConfig ->
                         userInfoEndpointConfig.userService(oauth2UserService)
                     )
+                    .defaultSuccessUrl("/users")
             )
         ;
 
