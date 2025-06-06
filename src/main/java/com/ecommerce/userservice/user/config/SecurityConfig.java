@@ -22,10 +22,9 @@ public class SecurityConfig {
             .authorizeHttpRequests(
                 authorizeHttpRequests ->
                     authorizeHttpRequests.requestMatchers(
-                            "/oauth/**",
-                            "/login/oauth2/code/**"
-                    ).permitAll()
-                    .anyRequest().authenticated()
+                            "/users/**"
+                    ).authenticated()
+                    .anyRequest().permitAll()
             )
             .httpBasic(AbstractHttpConfigurer::disable)
             .formLogin(AbstractHttpConfigurer::disable)
